@@ -30,14 +30,14 @@ for i in 0..xs.high:
     maxy = ys[i]
 
 let
-  gridWidth = maxx - minx + 1
-  gridHeight = maxy - miny + 1
+  width = maxx - minx + 1
+  height = maxy - miny + 1
 var
-  grid = newSeq[seq[int8]](gridHeight)
-  state = newSeq[seq[State]](gridHeight)
+  grid = newSeq[seq[int8]](height)
+  state = newSeq[seq[State]](height)
 for i in 0..grid.high:
-  grid[i] = newSeq[int8](gridWidth)
-  state[i] = newSeq[State](gridWidth)
+  grid[i] = newSeq[int8](width)
+  state[i] = newSeq[State](width)
 
 for i in 0..xs.high:
   xs[i] -= minx
@@ -45,46 +45,44 @@ for i in 0..xs.high:
   grid[ys[i]][xs[i]] = i.int8 + 1
   state[ys[i]][xs[i]] = Checking
 
-template checkFor(y, x: int): untyped =
+template checkFor(y, x: int, i: int8): untyped =
   case state[y][x]
   of Empty:
     state[y][x] = Contested
-    grid[y][x] = tag
+    grid[y][x] = i
   of Contested:
-    if tag != grid[y][x]:
+    if i != grid[y][x]:
       state[y][x] = Neutral
       grid[y][x] = 0
   else: discard
 
-let maxd = if (maxx - minx) > (maxy - miny):
-           maxx - minx
-           else: maxy - miny
+let maxDim = if width > height: width else: height
 
-for i in 0..maxd:
-  for x in 0..<gridWidth:
-    for y in 0..<gridHeight:
+for i in 0..<maxDim:
+  for x in 0..<width:
+    for y in 0..<height:
       let tag = grid[y][x]
       if state[y][x] == Checking:
         state[y][x] = Taken
         if x > 0:
-          checkFor(y, x - 1)
-        if x < gridWidth - 1:
-          checkFor(y, x + 1)
+          checkFor(y, x - 1, tag)
+        if x < width - 1:
+          checkFor(y, x + 1, tag)
         if y > 0:
-          checkFor(y - 1, x)
-        if y < gridHeight - 1:
-          checkFor(y + 1, x)
+          checkFor(y - 1, x, tag)
+        if y < height - 1:
+          checkFor(y + 1, x, tag)
 
-  for x in 0..<gridWidth:
-    for y in 0..<gridHeight:
+  for x in 0..<width:
+    for y in 0..<height:
       if state[y][x] == Contested:
         state[y][x] = Checking
 
 var
   count = newSeq[int](xs.len)
   safe = 0
-for x in 0..<gridWidth:
-  for y in 0..<gridHeight:
+for x in 0..<width:
+  for y in 0..<height:
     var sum = 0
     for i in 0..xs.high:
       sum += abs(y - ys[i]) + abs(x - xs[i])
@@ -93,7 +91,7 @@ for x in 0..<gridWidth:
 
     let tag = grid[y][x] - 1
     if tag != -1:
-      if x == 0 or y == 0 or x == gridWidth - 1 or y == gridHeight - 1:
+      if x == 0 or y == 0 or x == width - 1 or y == height - 1:
         count[tag] = -1
       elif count[tag] != -1:
         inc count[tag]
