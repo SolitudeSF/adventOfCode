@@ -1,9 +1,10 @@
 import algorithm, strutils, tables
 
-func newArray[N: static int, T]: array[N, T] = result
+const file = "input/day04"
 
-const file = "input/day4"
 let events = file.readFile.strip.splitLines.sorted cmp
+
+func newArray[N: static int, T]: array[N, T] = result
 
 var
   sleep = newTable[int, array[60, int8]](32)

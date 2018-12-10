@@ -1,6 +1,6 @@
 import strutils, math
 
-const file = "input/day6"
+const file = "input/day06"
 
 type
   State = enum

@@ -1,6 +1,6 @@
 #!/usr/bin/env elvish
 
-@input = (cat "input/day3")
+@input = (cat "input/day03")
 
 @fabric = (for i [(range 1000)] { put [(repeat 1000 0)] })
 @rects = (for i [(range (count $input))] { put [] })

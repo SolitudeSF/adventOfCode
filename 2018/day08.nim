@@ -1,6 +1,6 @@
 import strutils, sequtils
 
-const file = "input/day8"
+const file = "input/day08"
 let input = file.readFile.splitWhitespace.mapIt it.parseInt.int8
 
 func sumMetadata(s: seq[SomeNumber], pos = 0): (int, int) =

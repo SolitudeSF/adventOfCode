@@ -1,6 +1,6 @@
 #!/usr/bin/env elvish
 
-@input = (sort <"input/day4")
+@input = (sort <"input/day04")
 
 sleep = [&]
 

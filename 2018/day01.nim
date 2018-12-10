@@ -1,6 +1,6 @@
 import intsets, strutils
 
-const file = "input/day1"
+const file = "input/day01"
 
 block part1:
   var sum = 0

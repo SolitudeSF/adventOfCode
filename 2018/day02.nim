@@ -1,7 +1,6 @@
 import tables, strutils
 
-
-const file = "input/day2"
+const file = "input/day02"
 let lines = file.readFile.strip.splitLines
 
 block part1:

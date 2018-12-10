@@ -1,6 +1,6 @@
 import strutils
 
-const file = "input/day5"
+const file = "input/day05"
 
 let input = file.readFile.strip
 

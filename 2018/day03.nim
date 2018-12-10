@@ -1,10 +1,10 @@
 import strscans
 
+const file = "input/day03"
+
 type
   Rect = object
     x, y, w, h: int
-
-const file = "input/day3"
 
 var
   fabric: array[1000, array[1000, int8]]

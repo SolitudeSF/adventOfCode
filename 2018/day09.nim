@@ -1,6 +1,6 @@
 import lists, strutils
 
-const file = "input/day9"
+const file = "input/day09"
 
 proc simulate(playersN, marblesN: int): int =
   var

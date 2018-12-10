@@ -1,6 +1,6 @@
 #!/usr/bin/env elvish
 
-@input = (cat "input/day1")
+@input = (cat "input/day01")
 
 + $@input
 

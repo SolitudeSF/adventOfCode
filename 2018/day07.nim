@@ -1,6 +1,6 @@
 import tables
 
-const file = "input/day7"
+const file = "input/day07"
 
 type
   Worker = tuple[c: char, t: int]
