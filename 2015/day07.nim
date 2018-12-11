@@ -3,7 +3,7 @@ import strutils, tables
 const file = "input/day07"
 
 type
-  Wires = Table[uint16, uint16]
+  Wires = TableRef[uint16, uint16]
   Action = enum
     Assign, Not, And, Or, Rshift, Lshift
   Value = object
@@ -81,9 +81,7 @@ func resolve(c: Condition, w: Wires): uint16 =
   of Lshift:
     c.lshiftWire.resolve(w) shl c.lshift.resolve(w)
 
-var
-  wires = initTable[uint16, uint16](64)
-  conditions = initTable[uint16, Condition]()
+var conditions = newTable[uint16, Condition]()
 
 for line in file.lines:
   let
@@ -120,25 +118,20 @@ for line in file.lines:
     else: quit 1
   else: quit 1
 
+func solve(c: TableRef[uint16, Condition]): Wires =
+  var conditions = c.deepCopy
+  result = newTable[uint16, uint16]()
+  while conditions.len != 0:
+    for name, value in conditions:
+      if value.canResolve result:
+        result[name] = value.resolve(result)
+        conditions.del name
+
 var a: uint16
 block part1:
-  var
-    wires = wires
-    conditions = conditions
-  while conditions.len != 0:
-    for k, v in conditions:
-      if v.canResolve wires:
-        wires[k] = v.resolve(wires)
-        conditions.del k
-
-  a = wires["a".toUint]
+  a = conditions.solve["a".toUint]
   echo a
 
 block part2:
   conditions["b".toUint] = Condition(action: Assign, assignWire: Value(isWire: false, value: a))
-  while conditions.len != 0:
-    for k, v in conditions:
-      if v.canResolve wires:
-        wires[k] = v.resolve(wires)
-        conditions.del k
-  echo wires["a".toUint]
+  echo conditions.solve["a".toUint]
