@@ -15,7 +15,7 @@ for line in file.lines:
     distances[b][a] = d
 
 func extrDistance(map: TableRef[string, TableRef[string, int]],
-                  to: HashSet, a = "", at = 0): (int, int) =
+                  to: HashSet, a: string, at: int): (int, int) =
   if to.len == 0:
     (at, at)
   else:
@@ -23,15 +23,19 @@ func extrDistance(map: TableRef[string, TableRef[string, int]],
       max = int.low
       min = int.high
     for c in to:
-      let d = map.extrDistance(to - toSet([c]), c, (if a.len != 0: map[a][c] else: 0))
+      let d = map.extrDistance(to - toSet([c]), c, map[a][c])
       if d[0] < min: min = d[0]
       if d[1] > max: max = d[1]
     (at + min, at + max)
 
 func extrDistance(map: TableRef[string, TableRef[string, int]]): (int, int) =
+  result = (int.high, int.low)
   var cities = initSet[string]()
   for c in map.keys: cities.incl c
-  extrDistance map, cities
+  for c in cities:
+    let d = map.extrDistance(cities - toSet([c]), c, 0)
+    if d[0] < result[0]: result[0] = d[0]
+    if d[1] > result[1]: result[1] = d[1]
 
 var (min, max) = extrDistance(distances)
 
